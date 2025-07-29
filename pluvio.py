@@ -8,9 +8,16 @@ st.title("🌦️ Suivi Pluviométrie - Import / Export CSV")
 
 rolling_days = 7
 
-# Stockage session
+CSV_URL = "https://raw.githubusercontent.com/izadro/pluvihome/main/data/pluviometrie.csv"
+
+@st.cache_data
+def load_initial_data():
+    df = pd.read_csv(CSV_URL)
+    df["Date"] = pd.to_datetime(df["Date"])
+    return df
+
 if "data" not in st.session_state:
-    st.session_state.data = []
+    st.session_state.data = load_initial_data().to_dict(orient="records")
 
 # ----- Import de fichier CSV -----
 st.subheader("📥 Importer un fichier CSV")
