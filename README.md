@@ -7,7 +7,7 @@
 
 ## 🚀 Démo en ligne
 
-🔗 **[Lien vers l'application en ligne (exemple)](https://share.streamlit.io/)**  
+🔗 **[Lien vers l'application en ligne (exemple)]([https://share.streamlit.io/](https://pluvihome-qbycyxwotmqdbg3holvbsd.streamlit.app/)**  
 _(à personnaliser après déploiement)_
 
 ---
