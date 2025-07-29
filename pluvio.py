@@ -6,6 +6,8 @@ from datetime import date
 st.set_page_config(page_title="Pluviométrie CSV", layout="centered")
 st.title("🌦️ Suivi Pluviométrie - Import / Export CSV")
 
+rolling_days = 7
+
 # Stockage session
 if "data" not in st.session_state:
     st.session_state.data = []
@@ -36,7 +38,7 @@ if st.session_state.data:
     df = pd.DataFrame(st.session_state.data)
     df["Date"] = pd.to_datetime(df["Date"])
     df = df.sort_values("Date")
-    df["Moyenne 3 jours"] = df["Pluviométrie"].rolling(3, min_periods=1).mean()
+    df["Moyenne 3 jours"] = df["Pluviométrie"].rolling(rolling_days, min_periods=1).mean()
 
     st.subheader("📊 Données enregistrées")
     st.dataframe(df)
