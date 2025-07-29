@@ -14,12 +14,13 @@ CSV_URL = "https://raw.githubusercontent.com/izadro/pluvihome/main/example.csv"
 def load_initial_data():
     df = pd.read_csv(CSV_URL)
     df["Date"] = pd.to_datetime(df["Date"])
-    st.success("Données importées avec succès.")
-    st.toast('Example dataset loaded!')
+
     return df
 
 if "data" not in st.session_state:
     st.session_state.data = load_initial_data().to_dict(orient="records")
+    st.success("Données importées avec succès.")
+    st.toast('Example dataset loaded!')
 
 # ----- Import de fichier CSV -----
 st.subheader("📥 Importer un fichier CSV")
