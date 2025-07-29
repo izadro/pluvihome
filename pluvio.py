@@ -1,6 +1,5 @@
 # Création d'un exemple complet de code Streamlit pour l'application de saisie de pluviométrie
 
-streamlit_code = '''
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -51,11 +50,10 @@ if st.session_state.data:
     st.pyplot(fig)
 else:
     st.info("Ajoute des valeurs de pluie pour voir le graphique.")
-'''
 
 # Sauvegarde du code dans un fichier .py
 # streamlit_path = "/mnt/data/pluvio.py"
 # with open(streamlit_path, "w") as f:
 #     f.write(streamlit_code)
 
-# streamlit_code
+
