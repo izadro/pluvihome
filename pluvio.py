@@ -45,7 +45,7 @@ if st.session_state.data:
 
     fig, ax = plt.subplots(figsize=(10, 4))
     ax.bar(df["Date"], df["Pluviométrie"], color="skyblue", label="Pluviométrie")
-    ax.plot(df["Date"], df["Moyenne 3 jours"], color="darkblue", linewidth=2, label="Moy. glissante (3j)")
+    ax.plot(df["Date"], df["Moyenne 3 jours"], color="darkblue", linewidth=2, label="Moy. glissante ("+rolling_days+"j)")
     ax.set_xlabel("Date")
     ax.set_ylabel("Pluviométrie (mm)")
     ax.set_title("Historique des pluies")
