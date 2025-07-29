@@ -14,6 +14,8 @@ CSV_URL = "https://raw.githubusercontent.com/izadro/pluvihome/main/example.csv"
 def load_initial_data():
     df = pd.read_csv(CSV_URL)
     df["Date"] = pd.to_datetime(df["Date"])
+    st.success("Données importées avec succès.")
+    st.toast('Example dataset loaded!')
     return df
 
 if "data" not in st.session_state:
@@ -28,6 +30,7 @@ if uploaded_file:
         imported_df["Date"] = pd.to_datetime(imported_df["Date"])
         st.session_state.data = imported_df.to_dict(orient="records")
         st.success("Données importées avec succès.")
+        st.toast('Example dataset loaded!')
     else:
         st.error("Le fichier doit contenir les colonnes 'Date' et 'Pluviométrie'.")
 
