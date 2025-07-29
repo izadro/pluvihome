@@ -43,6 +43,9 @@ if st.session_state.data:
     st.subheader("📊 Données enregistrées")
     st.dataframe(df)
 
+    st.subheader("📊 Edition directe des données")
+    st.data_editor(df, num_rows="dynamic")
+
     fig, ax = plt.subplots(figsize=(10, 4))
     ax.bar(df["Date"], df["Pluviométrie"], color="skyblue", label="Pluviométrie")
     ax.plot(df["Date"], df["Moyenne "+str(rolling_days)+" jours"], color="darkblue", linewidth=2, label="Moy. glissante ("+str(rolling_days)+"j)")
