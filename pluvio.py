@@ -54,7 +54,7 @@ else:
 '''
 
 # Sauvegarde du code dans un fichier .py
-streamlit_path = "/mnt/data/app_pluviometrie_streamlit.py"
+streamlit_path = "/mnt/data/pluvio.py"
 with open(streamlit_path, "w") as f:
     f.write(streamlit_code)
 
