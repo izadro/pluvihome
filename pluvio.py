@@ -38,14 +38,14 @@ if st.session_state.data:
     df = pd.DataFrame(st.session_state.data)
     df["Date"] = pd.to_datetime(df["Date"])
     df = df.sort_values("Date")
-    df["Moyenne "+rolling_days+" jours"] = df["Pluviométrie"].rolling(rolling_days, min_periods=1).mean()
+    df["Moyenne "+str(rolling_days)+" jours"] = df["Pluviométrie"].rolling(rolling_days, min_periods=1).mean()
 
     st.subheader("📊 Données enregistrées")
     st.dataframe(df)
 
     fig, ax = plt.subplots(figsize=(10, 4))
     ax.bar(df["Date"], df["Pluviométrie"], color="skyblue", label="Pluviométrie")
-    ax.plot(df["Date"], df["Moyenne 3 jours"], color="darkblue", linewidth=2, label="Moy. glissante ("+rolling_days+"j)")
+    ax.plot(df["Date"], df["Moyenne "+str(rolling_days)+" jours"], color="darkblue", linewidth=2, label="Moy. glissante ("+str(rolling_days)+"j)")
     ax.set_xlabel("Date")
     ax.set_ylabel("Pluviométrie (mm)")
     ax.set_title("Historique des pluies")
