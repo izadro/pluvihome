@@ -44,7 +44,7 @@ if st.session_state.data:
     st.dataframe(df)
 
     st.subheader("📊 Edition directe des données")
-    st.data_editor(df, num_rows="dynamic")
+    df = st.data_editor(df, num_rows="dynamic")
 
     fig, ax = plt.subplots(figsize=(10, 4))
     ax.bar(df["Date"], df["Pluviométrie"], color="skyblue", label="Pluviométrie")
