@@ -38,7 +38,7 @@ if st.session_state.data:
     df = pd.DataFrame(st.session_state.data)
     df["Date"] = pd.to_datetime(df["Date"])
     df = df.sort_values("Date")
-    df["Moyenne 3 jours"] = df["Pluviométrie"].rolling(rolling_days, min_periods=1).mean()
+    df["Moyenne "+rolling_days+" jours"] = df["Pluviométrie"].rolling(rolling_days, min_periods=1).mean()
 
     st.subheader("📊 Données enregistrées")
     st.dataframe(df)
