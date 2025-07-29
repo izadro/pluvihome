@@ -1,59 +1,60 @@
-# Création d'un exemple complet de code Streamlit pour l'application de saisie de pluviométrie
-
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 from datetime import date
 
-st.set_page_config(page_title="Suivi Pluviométrie", layout="centered")
+st.set_page_config(page_title="Pluviométrie CSV", layout="centered")
+st.title("🌦️ Suivi Pluviométrie - Import / Export CSV")
 
-st.title("🌧️ Suivi quotidien de la pluviométrie")
-
-# Initialisation du stockage dans la session
+# Stockage session
 if "data" not in st.session_state:
     st.session_state.data = []
 
-# Formulaire de saisie
-with st.form("saisie_form"):
-    col1, col2 = st.columns(2)
-    with col1:
-        saisie_date = st.date_input("Date", value=date.today())
-    with col2:
-        saisie_valeur = st.number_input("Pluviométrie (mm)", min_value=0.0, step=0.1)
+# ----- Import de fichier CSV -----
+st.subheader("📥 Importer un fichier CSV")
+uploaded_file = st.file_uploader("Choisissez un fichier CSV", type="csv")
+if uploaded_file:
+    imported_df = pd.read_csv(uploaded_file)
+    if "Date" in imported_df.columns and "Pluviométrie" in imported_df.columns:
+        imported_df["Date"] = pd.to_datetime(imported_df["Date"])
+        st.session_state.data = imported_df.to_dict(orient="records")
+        st.success("Données importées avec succès.")
+    else:
+        st.error("Le fichier doit contenir les colonnes 'Date' et 'Pluviométrie'.")
 
-    submitted = st.form_submit_button("💾 Enregistrer")
-    if submitted:
-        st.session_state.data.append({"Date": saisie_date, "Pluviométrie": saisie_valeur})
-        st.success(f"Valeur de {saisie_valeur} mm enregistrée pour le {saisie_date}")
+# ----- Formulaire de saisie -----
+st.subheader("✏️ Ajouter une nouvelle valeur")
+with st.form("formulaire"):
+    jour = st.date_input("Date", value=date.today())
+    pluie = st.number_input("Pluviométrie (mm)", min_value=0.0, step=0.1)
+    if st.form_submit_button("Ajouter"):
+        st.session_state.data.append({"Date": str(jour), "Pluviométrie": pluie})
+        st.success(f"Ajouté : {pluie} mm pour le {jour}")
 
-# Création du DataFrame
+# ----- Affichage et graphique -----
 if st.session_state.data:
     df = pd.DataFrame(st.session_state.data)
-    df = df.sort_values("Date")
     df["Date"] = pd.to_datetime(df["Date"])
-    df["Moyenne glissante (3j)"] = df["Pluviométrie"].rolling(window=3, min_periods=1).mean()
+    df = df.sort_values("Date")
+    df["Moyenne 3 jours"] = df["Pluviométrie"].rolling(3, min_periods=1).mean()
 
     st.subheader("📊 Données enregistrées")
-    st.dataframe(df.style.format({"Pluviométrie": "{:.1f}", "Moyenne glissante (3j)": "{:.1f}"}), use_container_width=True)
-
-    st.subheader("📈 Graphique de la pluviométrie")
+    st.dataframe(df)
 
     fig, ax = plt.subplots(figsize=(10, 4))
-    ax.bar(df["Date"], df["Pluviométrie"], label="Pluviométrie (mm)", color="skyblue")
-    ax.plot(df["Date"], df["Moyenne glissante (3j)"], label="Moy. glissante (3j)", color="darkblue", linewidth=2)
+    ax.bar(df["Date"], df["Pluviométrie"], color="skyblue", label="Pluviométrie")
+    ax.plot(df["Date"], df["Moyenne 3 jours"], color="darkblue", linewidth=2, label="Moy. glissante (3j)")
     ax.set_xlabel("Date")
     ax.set_ylabel("Pluviométrie (mm)")
-    ax.set_title("Pluviométrie quotidienne avec moyenne glissante")
-    ax.grid(True)
+    ax.set_title("Historique des pluies")
     ax.legend()
+    ax.grid(True)
     plt.xticks(rotation=45)
     st.pyplot(fig)
+
+    # ----- Export CSV -----
+    st.subheader("📤 Exporter les données")
+    csv_export = df[["Date", "Pluviométrie"]].to_csv(index=False)
+    st.download_button("📄 Télécharger CSV", csv_export, file_name="pluviometrie_export.csv", mime="text/csv")
 else:
-    st.info("Ajoute des valeurs de pluie pour voir le graphique.")
-
-# Sauvegarde du code dans un fichier .py
-# streamlit_path = "/mnt/data/pluvio.py"
-# with open(streamlit_path, "w") as f:
-#     f.write(streamlit_code)
-
-
+    st.info("Aucune donnée disponible pour le moment.")
