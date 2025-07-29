@@ -42,6 +42,7 @@ with st.form("formulaire"):
     if st.form_submit_button("Ajouter"):
         st.session_state.data.append({"Date": str(jour), "Pluviométrie": pluie})
         st.success(f"Ajouté : {pluie} mm pour le {jour}")
+        st.toast(f"Ajouté : {pluie} mm pour le {jour}")
 
 # ----- Affichage et graphique -----
 if st.session_state.data:
@@ -71,5 +72,7 @@ if st.session_state.data:
     st.subheader("📤 Exporter les données")
     csv_export = df[["Date", "Pluviométrie"]].to_csv(index=False)
     st.download_button("📄 Télécharger CSV", csv_export, file_name="pluviometrie_export.csv", mime="text/csv")
+    st.success(f"Données exportées")
+    st.toast(f"Données exportées")
 else:
     st.info("Aucune donnée disponible pour le moment.")
